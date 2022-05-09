@@ -1,18 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class Attack : MonoBehaviour
 {
-    [SerializeField] private GameObject snowballPrefab;
+    [SerializeField] private string snowballPrefab;
     [SerializeField] private float throwForce;
+    [SerializeField] private Transform muzzle;
 
     private Camera cam;
 
     // Start is called before the first frame update
     void Start()
     {
-        cam = GetComponent<Camera>();
+        cam = GetComponentInChildren<Camera>();
     }
 
     // Update is called once per frame
@@ -20,7 +22,7 @@ public class Attack : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            GameObject snowball = Instantiate(snowballPrefab, transform.position, Quaternion.identity);
+            GameObject snowball = PhotonNetwork.Instantiate(snowballPrefab, muzzle.position, Quaternion.identity);
             snowball.GetComponent<Rigidbody>().AddForce(cam.transform.forward * throwForce, ForceMode.Impulse);
         }
     }
